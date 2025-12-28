@@ -11,6 +11,7 @@ flask==3.0.0
 razorpay==1.4.2
 requests==2.31.0
 qrcode[pil]==7.4.2
-Pillow==10.1.0
+Pillow==10.4.0
 nowpayments-api==1.0.0
+
 opentele>=1.15.1
