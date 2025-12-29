@@ -1737,15 +1737,23 @@ async def process_single_session_bulk(file_path, user_id, bot):
         
         caption_parts.append(f"⏰ {datetime.now().strftime('%Y-%m-%d %H:%M')}")
         
-        with open(abs_file_path, 'rb') as f:
+     # Try to upload to storage channel if configured
+message_id = None
+if config.STORAGE_CHANNEL_ID and config.STORAGE_CHANNEL_ID.strip():
+    try:
+        with open(temp_file_path, 'rb') as f:
             channel_message = await bot.send_document(
                 chat_id=config.STORAGE_CHANNEL_ID,
                 document=f,
-                filename=os.path.basename(abs_file_path),
-                caption="\n".join(caption_parts)
+                filename=os.path.basename(file_path),
+                caption=caption
             )
-        
         message_id = channel_message.message_id
+        logger.info(f"✅ Bulk session backed up: {message_id}")
+    except Exception as e:
+        logger.warning(f"⚠️ Could not upload to storage channel: {e}")
+else:
+    logger.info("No storage channel - saving to database only")
         
         cleanup_temp_files(abs_file_path, abs_session_name)
         
@@ -3603,3 +3611,4 @@ def setup_admin_handlers(application):
     application.add_handler(CommandHandler("pending_crypto", admin_pending_crypto))
 
     logger.info("✅ Crypto manual verification commands registered")
+
