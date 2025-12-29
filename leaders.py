@@ -703,21 +703,22 @@ async def leader_receive_session_file(update, context):
             }
             
             emoji = status_emoji.get(spam_check['status'], '❓')
-            
-            with open(abs_file_path, 'rb') as f:
-                channel_message = await context.bot.send_document(
-                    chat_id=config.STORAGE_CHANNEL_ID,
-                    document=f,
-                    filename=file.file_name,
-                    caption=(
-                        f"📱 Phone: {phone}\n"
-                        f"{emoji} Status: {spam_check['status']}\n"
-                        f"👨‍💼 Uploaded by: {update.effective_user.username or user_id}\n"
-                        f"⏰ {datetime.now().strftime('%Y-%m-%d %H:%M')}"
-                    )
-                )
-            
-            message_id = channel_message.message_id
+          # Try to upload to storage channel if configured
+message_id = None
+if config.STORAGE_CHANNEL_ID and config.STORAGE_CHANNEL_ID.strip():
+    try:
+        with open(abs_file_path, 'rb') as f:
+            channel_message = await bot.send_document(
+                chat_id=config.STORAGE_CHANNEL_ID,
+                document=f,
+                filename=document.file_name,
+                caption="\n".join(caption_parts)
+            )
+        message_id = channel_message.message_id
+    except Exception as e:
+        logger.warning(f"⚠️ Storage channel upload failed: {e}")
+else:
+    logger.info("No storage channel configured")
             
             logger.info(f"✅ Session uploaded to channel, message_id: {message_id}")
             
@@ -2589,4 +2590,5 @@ def setup_leader_handlers(application):
     application.add_handler(CallbackQueryHandler(admin_approve_upload, pattern='^approve_upload_'))
     application.add_handler(CallbackQueryHandler(admin_reject_upload, pattern='^reject_upload_'))
     
+
     logger.info("✅ Leader handlers registered successfully")
