@@ -1280,24 +1280,17 @@ async def receive_session_file(update: Update, context: ContextTypes.DEFAULT_TYP
                 caption_parts.append(f"ℹ️ {auto_info}")
             
             caption_parts.append(f"⏰ {datetime.now().strftime('%Y-%m-%d %H:%M')}")
-           # Try to upload to storage channel if configured
-message_id = None
-if config.STORAGE_CHANNEL_ID and config.STORAGE_CHANNEL_ID.strip():
-    try:
-        with open(abs_file_path, 'rb') as f:
-            channel_message = await bot.send_document(
-                chat_id=config.STORAGE_CHANNEL_ID,
-                document=f,
-                filename=document.file_name,
-                caption="\n".join(caption_parts)
-            )
-        message_id = channel_message.message_id
-        logger.info(f"✅ Session backed up to storage channel: {message_id}")
-    except Exception as e:
-        logger.warning(f"⚠️ Could not upload to storage channel: {e}")
-        logger.info("Session will be saved to database only")
-else:
-    logger.info("No storage channel configured - saving to database only")
+            
+            with open(abs_file_path, 'rb') as f:
+                channel_message = await bot.send_document(
+                    chat_id=config.STORAGE_CHANNEL_ID,
+                    document=f,
+                    filename=document.file_name,
+                    caption="\n".join(caption_parts)
+                )
+            
+            message_id = channel_message.message_id
+            
             cleanup_temp_files(abs_file_path, abs_session_name)
             
             # Store session info with auto-extracted data
@@ -1737,23 +1730,15 @@ async def process_single_session_bulk(file_path, user_id, bot):
         
         caption_parts.append(f"⏰ {datetime.now().strftime('%Y-%m-%d %H:%M')}")
         
-     # Try to upload to storage channel if configured
-message_id = None
-if config.STORAGE_CHANNEL_ID and config.STORAGE_CHANNEL_ID.strip():
-    try:
-        with open(temp_file_path, 'rb') as f:
+        with open(abs_file_path, 'rb') as f:
             channel_message = await bot.send_document(
                 chat_id=config.STORAGE_CHANNEL_ID,
                 document=f,
-                filename=os.path.basename(file_path),
-                caption=caption
+                filename=os.path.basename(abs_file_path),
+                caption="\n".join(caption_parts)
             )
+        
         message_id = channel_message.message_id
-        logger.info(f"✅ Bulk session backed up: {message_id}")
-    except Exception as e:
-        logger.warning(f"⚠️ Could not upload to storage channel: {e}")
-else:
-    logger.info("No storage channel - saving to database only")
         
         cleanup_temp_files(abs_file_path, abs_session_name)
         
@@ -3609,6 +3594,4 @@ def setup_admin_handlers(application):
     # Crypto manual verification commands
     application.add_handler(CommandHandler("verify_crypto", admin_verify_crypto))
     application.add_handler(CommandHandler("pending_crypto", admin_pending_crypto))
-
     logger.info("✅ Crypto manual verification commands registered")
-
