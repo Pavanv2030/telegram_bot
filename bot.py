@@ -353,7 +353,7 @@ async def show_inr_deposit_options(query):
     await query.edit_message_text(
         "INR Payment\n\n"
         "For INR deposits, please contact:\n"
-        "@akash_support_bot\n\n"
+        "@Riox231\n\n"
         "Our support team will assist you with INR payment options.",
         reply_markup=reply_markup
     )
@@ -762,7 +762,7 @@ async def show_buy_options(query):
         "📱 Sessions: Get complete session file\n"
         "📲 Manual OTP: Get number + OTP + 2FA\n\n"
         "💰 All prices in USD\n\n"
-        "For old aged accounts: @Akash_support_bot\n\n"
+        "For old aged accounts: @Riox231\n\n"
         "Choose an option:",
         reply_markup=reply_markup,
         parse_mode='HTML'
@@ -1477,7 +1477,7 @@ async def process_session_purchase(query, user_id, session_id, context):
             text=(
                 f"❌ Error Sending Session File\n\n"
                 f"Error: {error_msg}\n\n"
-                f"Please contact support: @Akash_support_bot"
+                f"Please contact support: @Riox231"
             )
         )
 
@@ -1681,7 +1681,7 @@ async def process_manual_purchase(query, user_id, session_id, context):
                     "1. Try logging in manually with this phone\n"
                     "2. Request OTP from Telegram app\n"
                     "3. Check if you receive the code\n\n"
-                    "Contact @Akash_support_bot if issue persists"
+                    "Contact @Riox231 if issue persists"
                 )
             )
             
@@ -1703,7 +1703,7 @@ async def process_manual_purchase(query, user_id, session_id, context):
                 f"3. Request login code\n"
                 f"4. Enter the code you receive\n"
                 f"5. Enter 2FA password if asked\n\n"
-                "Contact @Akash_support_bot for help"
+                "Contact @Riox231 for help"
             )
         )
         
@@ -1726,7 +1726,7 @@ async def process_manual_purchase(query, user_id, session_id, context):
                 "2. Enter this phone number\n"
                 "3. Use the OTP you receive\n"
                 "4. Enter 2FA if needed\n\n"
-                "@Akash_support_bot"
+                "@Riox231"
             )
         )
 
@@ -1838,7 +1838,7 @@ async def show_profile(query, user_id):
 async def show_support(query):
     """Show support contact"""
     keyboard = [
-        [InlineKeyboardButton("📱 Contact Support", url="https://t.me/Akash_support_bot")],
+        [InlineKeyboardButton("📱 Contact Support", url="https://t.me/Riox231")],
         [InlineKeyboardButton("« Back", callback_data='back_menu')]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -1846,9 +1846,9 @@ async def show_support(query):
     await query.edit_message_text(
         "💬 Support & Help\n\n"
         "For any queries or issues:\n"
-        "📱 Contact: @Akash_support_bot\n\n"
+        "📱 Contact: @Riox231\n\n"
         "💰 For old aged accounts:\n"
-        "📱 Contact: @Akash_support_bot\n\n"
+        "📱 Contact: @Riox231\n\n"
         "We're here to help you 24/7!",
         reply_markup=reply_markup
     )
@@ -3078,4 +3078,5 @@ if __name__ == '__main__':
     except Exception as e:
         logger.error(f"❌ FATAL ERROR: {e}")
         import traceback
+
         traceback.print_exc()
