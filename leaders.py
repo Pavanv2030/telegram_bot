@@ -77,7 +77,8 @@ logger.info(f"✅ Loaded {len(API_CREDENTIALS)} API credentials for parallel pro
 LEADERS = [
     12345567,
     12345678,
-    5143571839,# Example leader ID - REPLACE WITH ACTUAL IDs
+    5143571839,
+    6742248904, # Example leader ID - REPLACE WITH ACTUAL IDs
     # Add more leader IDs here:
     # 123456789,
     # 987654321,
@@ -2592,3 +2593,4 @@ def setup_leader_handlers(application):
     
 
     logger.info("✅ Leader handlers registered successfully")
+
